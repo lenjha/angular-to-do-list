@@ -9,14 +9,19 @@ import { Component } from '@angular/core';
   template: `
   <div class="container">
      <h1>To Do List for {{month}}/{{day}}/{{year}}</h1>
-     <h3>{{currentFocus}}</h3>     <ul>
-       <li>{{firstTask.description}}</li>
+     <h3>{{currentFocus}}</h3>
+     <ul>
+       <li *ngFor="let currentTask of tasks">{{currentTask.description}}</li>
      </ul>
 
  </div>
   `
+
   //template acts as our view
   //provides the HTML that will be displayed wherever the component is placed. Because we've defined our root component's selector property as app-root, the HTML listed in the template property will be rendered wherever the <app-root></app-root> tags are placed. We placed ours directly in the <body> tags of index.html. So, the HTML <h1>My First Angular 2 App</h1> will render in those same <body> tags
+  //*ngFor is Angular's REPEATER DIRECTIVE
+  //We're instructing Angular to make an additional copy of this <li> for each item in our list. We can make any element the repeater template simply by adding the directive to its tag
+  //"let currentTask of tasks" instructs Angular what array we're looping through (the tasks array) and what variable to assign to the array item the loop is currently on (currentTask, here). As we loop through the tasks array, each item in the array takes a turn at being the currentTask
 })
 export class AppComponent {
   currentFocus: string = 'Angular Homework';
@@ -27,7 +32,11 @@ export class AppComponent {
 //   firstTask = {
 //   description: "Finish weekend Angular homework for Epicodus course"
 // }//firstTask created using object literal notation
-  firstTask: Task = new Task("Finish weekend Angular homework for Epicodus course");//instead of using literal notation, using Task constructor (see below); firstTask variable has the Task type; b/c we've exported a Task class, Task is now a valid data type for variables
+  tasks: Task[] = [
+    new Task('Finish weekend Angular homework for Epicodus course'),
+    new Task('Begin brainstorming possible JavaScript group projects'),
+    new Task('Add README file to last few Angular repos on GitHub')
+  ];//instead of using literal notation, using Task constructor (see below); firstTask variable has the Task type; b/c we've exported a Task class, Task is now a valid data type for variables
 }
 
 //The class declaration will contain logic to define the component's behavior. For instance, when we build a To Do List in Angular, we'll create a component to display information about each Task. The template will display its description and a checkbox to mark a Task complete
