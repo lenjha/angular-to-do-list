@@ -3,7 +3,7 @@
   "description": "",
   "main": "",
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://github.com/thatcat13/angular2-to-do",
   "ignore": [
     "**/.*",
     "node_modules",
