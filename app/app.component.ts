@@ -11,9 +11,21 @@ import { Component } from '@angular/core';
      <h1>To Do List for {{month}}/{{day}}/{{year}}</h1>
      <h3>{{currentFocus}}</h3>
      <ul>
-       <li *ngFor="let currentTask of tasks">{{currentTask.description}}</li>
+       <li [class]="priorityColor(currentTask)" (click)="isDone(currentTask)" *ngFor="let currentTask of tasks">{{currentTask.description}}  <button (click)="editTask()">Edit!</button></li>
      </ul>
-
+     <hr>
+        <div>
+          <h3>{{selectedTask.description}}</h3>
+          <p>Task Complete? {{selectedTask.done}}</p>
+          <h3>Edit Task</h3>
+          <label>Enter Task Description:</label>
+          <input [(ngModel)]="selectedTask.description">
+          <label>Enter Task Priority (1-3):</label>
+          <br>
+          <input type="radio" [(ngModel)]="selectedTask.priority" [value]="1">1 (Low Priority)<br>
+          <input type="radio" [(ngModel)]="selectedTask.priority" [value]="2">2 (Medium Priority)<br>
+          <input type="radio" [(ngModel)]="selectedTask.priority" [value]="3">3 (High Priority)
+       </div>
  </div>
   `
 
@@ -24,6 +36,7 @@ import { Component } from '@angular/core';
   //"let currentTask of tasks" instructs Angular what array we're looping through (the tasks array) and what variable to assign to the array item the loop is currently on (currentTask, here). As we loop through the tasks array, each item in the array takes a turn at being the currentTask
 })
 export class AppComponent {
+  //component class is what this is declares how component BEHAVES
   currentFocus: string = 'Angular Homework';
   currentTime = new Date();
   month: number = this.currentTime.getMonth() + 1;
@@ -33,10 +46,35 @@ export class AppComponent {
 //   description: "Finish weekend Angular homework for Epicodus course"
 // }//firstTask created using object literal notation
   tasks: Task[] = [
-    new Task('Finish weekend Angular homework for Epicodus course'),
-    new Task('Begin brainstorming possible JavaScript group projects'),
-    new Task('Add README file to last few Angular repos on GitHub')
+    new Task('Finish weekend Angular homework for Epicodus course', 3),
+    new Task('Begin brainstorming possible JavaScript group projects', 2),
+    new Task('Add README file to last few Angular repos on GitHub', 2)
   ];//instead of using literal notation, using Task constructor (see below); firstTask variable has the Task type; b/c we've exported a Task class, Task is now a valid data type for variables
+  selectedTask: Task = this.tasks[0];
+
+  editTask() {
+    alert("You just requested to edit a Task!");
+  }
+  //method that's NOT in the Task class, must be defined in the COMPONENT class
+
+  isDone(clickedTask: Task) {
+    if(clickedTask.done === true) {
+      alert("This task is done!");
+    } else {
+      alert("This task is not done. Better get to work!");
+    }
+  }
+
+  priorityColor(currentTask){
+    if (currentTask.priority === 3){
+      return "bg-danger";
+    } else if (currentTask.priority === 2) {
+      return  "bg-warning";
+    } else {
+      return "bg-info";
+    }
+  }
+
 }
 
 //The class declaration will contain logic to define the component's behavior. For instance, when we build a To Do List in Angular, we'll create a component to display information about each Task. The template will display its description and a checkbox to mark a Task complete
@@ -50,6 +88,6 @@ export class AppComponent {
 
 export class Task {
   public done: boolean = false;
-  constructor(public description: string) { }
+  constructor(public description: string, public priority: number) { }
 }
 //Task class is our model; it resides OUTSIDE of AppComponent class and includes keyword export so other areas of app can access it
