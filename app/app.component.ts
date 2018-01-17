@@ -12,7 +12,13 @@ import { Task } from './task.model';
    <h1>To Do List for {{month}}/{{day}}/{{year}}</h1>
    <h3>{{currentFocus}}</h3>
 
-   <task-list></task-list>
+   <task-list [childTaskList]="masterTaskList" (clickSender)="editTask($event)"></task-list>
+   <hr>
+   <edit-task [childSelectedTask]="selectedTask"></edit-task>
+   <!--"data down" part of the paradigm here: [] = the input to go to @Input(); "masterTaskList" is what is being transferred
+   () = output
+   $event is simply how you pass an argument upward. Any arguments sent from a child component to a parent component in an upwards action will be housed in $event when it reaches the parent component.-->
+
 
    <!--<ul>
      <li [class]="priorityColor(currentTask)" (click)="isDone(currentTask)" *ngFor="let currentTask of tasks">{{currentTask.description}}  <button (click)="editTask(currentTask)">Edit!</button></li>
@@ -35,7 +41,7 @@ import { Task } from './task.model';
      </div>
     </div>
   </div>-->
-  `
+  </div>`
 })
   //template acts as our view
   //provides the HTML that will be displayed wherever the component is placed. Because we've defined our root component's selector property as app-root, the HTML listed in the template property will be rendered wherever the <app-root></app-root> tags are placed. We placed ours directly in the <body> tags of index.html. So, the HTML <h1>My First Angular 2 App</h1> will render in those same <body> tags
@@ -49,10 +55,16 @@ export class AppComponent {
   month: number = this.currentTime.getMonth() + 1;
   day: number = this.currentTime.getDate();
   year: number = this.currentTime.getFullYear();
-//   firstTask = {
-//   description: "Finish weekend Angular homework for Epicodus course"
-// }//firstTask created using object literal notation
+
   selectedTask = null;
+
+
+  masterTaskList: Task[] = [
+    new Task('Finish weekend Angular homework for Epicodus course', 3),
+    new Task('Begin brainstorming possible JavaScript group projects', 2),
+    new Task('Add README file to last few Angular repos on GitHub', 2)
+  ];
+
 
   editTask(clickedTask) {
     this.selectedTask = clickedTask;

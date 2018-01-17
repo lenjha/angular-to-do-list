@@ -6,13 +6,15 @@ import { AppComponent }   from './app.component';
 //actually refers to the root component we created! We call it AppComponent because that's the name of the class declaration exported at the bottom of its file.
 import { FormsModule }  from '@angular/forms';
 import { TaskListComponent } from './task-list.component';
+import { EditTaskComponent } from './edit-task.component';
 
 //decorater for NgModule; tells Angular that the code following this decorator is a module
 @NgModule({
   imports: [ BrowserModule,
               FormsModule ],
   declarations: [ AppComponent,
-              TaskListComponent],
+              TaskListComponent,
+              EditTaskComponent],
   bootstrap:    [ AppComponent ]
   //bootstrap = launch (not Bootstrap CSS)
 })
