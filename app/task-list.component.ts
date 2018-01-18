@@ -4,9 +4,20 @@ import { Task } from './task.model';
 @Component ({
   selector: "task-list",
   template: `
-  <ul>
-  <li (click)="isDone(currentTask)" *ngFor="let currentTask of childTaskList">{{currentTask.description}} <button (click)="editButtonHasBeenClicked(currentTask)">Edit!</button></li>
-</ul>
+    <select (change)="onChange($event.target.value)">
+      <option value="allTasks">All Tasks</option>
+      <option value="completedTasks">Completed Tasks</option>
+      <option value="incompleteTasks" selected="selected">Incomplete Tasks</option>
+    </select>
+
+
+    <ul>
+      <li (click)="isDone(currentTask)" *ngFor="let currentTask of childTaskList | completeness:filterByCompleteness">{{currentTask.description}} {{currentTask.priority}}
+        <input *ngIf="currentTask.done === true" type="checkbox" checked (click)="toggleDone(currentTask, false)"/>
+        <input *ngIf="currentTask.done === false" type="checkbox" (click)="toggleDone(currentTask, true)"/>
+        <button (click)="editButtonHasBeenClicked(currentTask)">Edit!</button>
+      </li>
+    </ul>
   `
 })
 
@@ -15,11 +26,17 @@ export class TaskListComponent {
   //da inbox! for the parental deliveries
   @Output() clickSender = new EventEmitter();
 
+  filterByCompleteness: string = "incompleteTasks";
+
   editButtonHasBeenClicked(taskToEdit: Task) {
     this.clickSender.emit(taskToEdit);
   }
   //By calling emit() on our clickSender and passing in taskToEdit, we're notifying the parent of TaskListComponent that someone has requested to edit a Task and providing the specific Task that needs to be edited.
-  //You may only include one argument when passing an action upwards with an EventEmitter @Output(). If we need multiple pieces of data, we must store them in an array or as key-value pairs in an object. 
+  //You may only include one argument when passing an action upwards with an EventEmitter @Output(). If we need multiple pieces of data, we must store them in an array or as key-value pairs in an object.
+
+  onChange(optionFromMenu) {
+  this.filterByCompleteness = optionFromMenu;
+}
 
   isDone(clickedTask: Task) {
     if(clickedTask.done === true) {

@@ -14,7 +14,8 @@ import { Task } from './task.model';
 
    <task-list [childTaskList]="masterTaskList" (clickSender)="editTask($event)"></task-list>
    <hr>
-   <edit-task [childSelectedTask]="selectedTask"></edit-task>
+   <edit-task [childSelectedTask]="selectedTask" (doneButtonClickedSender)="finishedEditing()"></edit-task>
+   <new-task (newTaskSender)="addTask($event)"></new-task>
    <!--"data down" part of the paradigm here: [] = the input to go to @Input(); "masterTaskList" is what is being transferred
    () = output
    $event is simply how you pass an argument upward. Any arguments sent from a child component to a parent component in an upwards action will be housed in $event when it reaches the parent component.-->
@@ -73,6 +74,10 @@ export class AppComponent {
 
   finishedEditing() {
     this.selectedTask = null;
+}
+
+addTask(newTaskFromChild: Task) {
+  this.masterTaskList.push(newTaskFromChild);
 }
 
 }
